@@ -1,4 +1,3 @@
-import searchSouceFiles from '../src/util/searchSourceFiles';
 import searchSourceFiles from '../src/util/searchSourceFiles';
 
 it('should returns all source files', async () => {
