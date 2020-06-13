@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
-      - run: npm run build
       - run: npm test
 
   publish-npm:
@@ -27,9 +26,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+          scope: karuta
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm publish
+      - run: npm run build
+      - run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
@@ -41,8 +42,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+          scope: karuta
           registry-url: https://npm.pkg.github.com/
       - run: npm ci
-      - run: npm publish
+      - run: npm run build
+      - run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
