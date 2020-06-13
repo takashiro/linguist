@@ -5,7 +5,9 @@ import * as util from 'util';
 
 import MessageBundle from '../src/base/MessageBundle';
 
+const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const unlink = util.promisify(fs.unlink);
 
 const bundle = new MessageBundle(path.join(os.tmpdir(), 'zh-CN.json'));
 
@@ -18,11 +20,12 @@ const desc2 = {
 };
 const desc3 = {
 	id: 'test3',
+	message: 'okay',
 };
 const desc4 = {};
 
-afterAll(() => {
-	fs.unlinkSync(bundle.getFilePath());
+afterAll(async () => {
+	await unlink(bundle.getFilePath());
 });
 
 it('should save messages', async () => {
@@ -50,6 +53,22 @@ it('should merge duplicate messages and skip invalid messages', async () => {
 	expect(descriptors[0]).toStrictEqual(desc1);
 	expect(descriptors[1]).toStrictEqual(desc2);
 	expect(descriptors[2]).toStrictEqual(desc3);
+});
+
+it('should be released in JavaScript.', async () => {
+	const out = path.join(os.tmpdir(), 'tmp.js');
+	await bundle.release(out);
+	const outContent = await readFile(out, 'utf-8');
+	await unlink(out);
+	const window = {
+		linguist: {},
+	};
+	eval(outContent);
+	expect(window.linguist).toStrictEqual({
+		messages: {
+			test3: 'okay',
+		},
+	});
 });
 
 it('should remove invalid messages', async () => {
