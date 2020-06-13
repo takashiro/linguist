@@ -14,6 +14,8 @@ export async function handler(argv: Arguments): Promise<void> {
 	const locales = argv.locales.split(',');
 	for (const localeId of locales) {
 		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
-		await bundle.release(path.join(argv.distDir, `${localeId}.js`));
+		const releasePath = path.join(argv.distDir, `${localeId}.js`);
+		console.log(`Generating ${releasePath} from ${bundle.getFilePath()}`);
+		await bundle.release(releasePath);
 	}
 }

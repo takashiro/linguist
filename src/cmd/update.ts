@@ -19,6 +19,7 @@ export async function handler(argv: Arguments): Promise<void> {
 	const locales = argv.locales.split(',');
 	for (const localeId of locales) {
 		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
+		console.log(`Updating ${bundle.getFilePath()}`);
 		await bundle.update(messages);
 	}
 }
