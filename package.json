@@ -1,0 +1,40 @@
+{
+  "name": "@karuta/react-linguist",
+  "version": "0.0.1",
+  "description": "Extract messages and manage translations of React Intl",
+  "bin": {
+    "linguist": "bin/linguist.js"
+  },
+  "main": "bin",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takashiro/react-linguist.git"
+  },
+  "keywords": [
+    "react",
+    "i18n",
+    "extract"
+  ],
+  "author": "Kazuichi Takashiro",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/takashiro/react-linguist/issues"
+  },
+  "homepage": "https://github.com/takashiro/react-linguist#readme",
+  "devDependencies": {
+    "@types/glob": "^7.1.2",
+    "@types/mkdirp": "^1.0.1",
+    "@types/yargs": "^15.0.5",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@formatjs/ts-transformer": "^2.1.2",
+    "glob": "^7.1.6",
+    "mkdirp": "^1.0.4",
+    "yargs": "^15.3.1"
+  }
+}
