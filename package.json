@@ -27,8 +27,11 @@
   "homepage": "https://github.com/takashiro/react-linguist#readme",
   "devDependencies": {
     "@types/glob": "^7.1.2",
+    "@types/jest": "^26.0.0",
     "@types/mkdirp": "^1.0.1",
     "@types/yargs": "^15.0.5",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
