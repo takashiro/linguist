@@ -6,7 +6,6 @@ import * as util from 'util';
 import MessageBundle from '../src/base/MessageBundle';
 
 const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
 const unlink = util.promisify(fs.unlink);
 
 const bundle = new MessageBundle(path.join(os.tmpdir(), 'zh-CN.json'));
@@ -29,33 +28,32 @@ afterAll(async () => {
 });
 
 it('should save messages', async () => {
-	await bundle.update([
-		desc1,
-		desc2,
-	]);
+	const save = jest.spyOn(bundle, 'save');
+	await bundle.update([desc1, desc2]);
+	expect(save).toBeCalledTimes(1);
+	expect(save).toBeCalledWith([desc1, desc2]);
+	save.mockRestore();
 });
 
 it('should read messages', async () => {
 	const descriptors = await bundle.read();
-	expect(descriptors).toHaveLength(2);
-	expect(descriptors[0]).toStrictEqual(desc1);
-	expect(descriptors[1]).toStrictEqual(desc2);
+	expect(descriptors).toStrictEqual([desc1, desc2]);
 });
 
 it('should merge duplicate messages and skip invalid messages', async () => {
+	const save = jest.spyOn(bundle, 'save').mockResolvedValue();
 	await bundle.update([
 		desc2,
 		desc3,
 		desc4,
 	]);
-	const descriptors = await bundle.read();
-	expect(descriptors).toHaveLength(3);
-	expect(descriptors[0]).toStrictEqual(desc1);
-	expect(descriptors[1]).toStrictEqual(desc2);
-	expect(descriptors[2]).toStrictEqual(desc3);
+	expect(save).toBeCalledTimes(1);
+	expect(save).toBeCalledWith([desc1, desc2, desc3]);
+	save.mockRestore();
 });
 
 it('should be released in JavaScript.', async () => {
+	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc3, desc4]);
 	const out = path.join(os.tmpdir(), 'tmp.js');
 	await bundle.release(out);
 	const outContent = await readFile(out, 'utf-8');
@@ -69,11 +67,25 @@ it('should be released in JavaScript.', async () => {
 			test3: 'okay',
 		},
 	});
+	read.mockRestore();
 });
 
 it('should remove invalid messages', async () => {
-	await writeFile(bundle.getFilePath(), JSON.stringify([desc1, desc4]));
+	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc1, desc4]);
+	const save = jest.spyOn(bundle, 'save').mockResolvedValue();
 	await bundle.update([]);
-	const descriptors = await bundle.read();
-	expect(descriptors).toStrictEqual([desc1]);
+	expect(save).toBeCalledTimes(1);
+	expect(save).toBeCalledWith([desc1]);
+	read.mockRestore();
+	save.mockRestore();
+});
+
+it('should prune unused messages', async () => {
+	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc1, desc2]);
+	const save = jest.spyOn(bundle, 'save').mockResolvedValue();
+	await bundle.prune([desc2, desc3]);
+	expect(save).toBeCalledTimes(1);
+	expect(save).toBeCalledWith([desc2]);
+	read.mockRestore();
+	save.mockRestore();
 });
