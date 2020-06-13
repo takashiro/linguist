@@ -4,3 +4,5 @@
 /test/
 /message/
 /.npmignore
+/jest.config.js
+/coverage/
