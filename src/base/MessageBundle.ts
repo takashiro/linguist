@@ -60,7 +60,18 @@ export default class MessageBundle {
 		}
 
 		const newContent = Array.from(map.values());
-		await writeFile(this.filePath, JSON.stringify(newContent, undefined, '\t'));
+		await this.save(newContent);
+	}
+
+	async prune(messages: MessageDescriptor[]): Promise<void> {
+		const oldContent = await this.read();
+		const map = convertToMap(messages);
+		const newContent = oldContent.filter((desc) => desc.id && map.has(desc.id));
+		await this.save(newContent);
+	}
+
+	async save(messages: MessageDescriptor[]): Promise<void> {
+		await writeFile(this.filePath, JSON.stringify(messages, undefined, '\t'));
 	}
 
 	async release(outputPath: string): Promise<void> {
