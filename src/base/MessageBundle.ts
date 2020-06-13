@@ -62,4 +62,15 @@ export default class MessageBundle {
 		const newContent = Array.from(map.values());
 		await writeFile(this.filePath, JSON.stringify(newContent, undefined, '\t'));
 	}
+
+	async release(outputPath: string): Promise<void> {
+		const content = await this.read();
+		const messages: Record<string, string> = {};
+		for (const desc of content) {
+			if (desc.id && desc.message) {
+				messages[desc.id] = desc.message;
+			}
+		}
+		await writeFile(outputPath, `window.linguist = { messages: ${JSON.stringify(messages)} };`);
+	}
 }
