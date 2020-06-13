@@ -1,9 +1,11 @@
 /.github/
 /.vscode/
 /node_modules/
+/coverage/
 /src/
 /test/
 /message/
 /.npmignore
 /jest.config.js
-/coverage/
+.eslintrc.json
+.eslintignore

@@ -9,6 +9,7 @@ const compilerOptions = {
 	outDir: 'tmp',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 function emptyFn(): void {}
 
 function extractMessages(sourceFiles: string[]): MessageDescriptor[] {
