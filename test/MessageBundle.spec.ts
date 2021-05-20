@@ -4,24 +4,25 @@ import * as path from 'path';
 import * as util from 'util';
 
 import MessageBundle from '../src/base/MessageBundle';
+import MessageDescriptor from '../src/base/MessageDescriptor';
 
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);
 
 const bundle = new MessageBundle(path.join(os.tmpdir(), 'zh-CN.json'));
 
-const desc1 = {
+const desc1: MessageDescriptor = {
 	id: 'test1',
 };
-const desc2 = {
+const desc2: MessageDescriptor = {
 	id: 'test2',
 	defaultMessage: 'test2',
 };
-const desc3 = {
+const desc3: MessageDescriptor = {
 	id: 'test3',
 	message: 'okay',
 };
-const desc4 = {};
+const desc4 = {} as unknown as MessageDescriptor;
 
 afterAll(async () => {
 	await unlink(bundle.getFilePath());
