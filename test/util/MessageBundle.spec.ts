@@ -3,8 +3,8 @@ import * as os from 'os';
 import * as path from 'path';
 import * as util from 'util';
 
-import MessageBundle from '../src/base/MessageBundle';
-import MessageDescriptor from '../src/base/MessageDescriptor';
+import MessageBundle from '../../src/base/MessageBundle';
+import MessageDescriptor from '../../src/base/MessageDescriptor';
 
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);

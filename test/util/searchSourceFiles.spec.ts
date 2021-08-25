@@ -1,4 +1,4 @@
-import searchSourceFiles from '../src/util/searchSourceFiles';
+import searchSourceFiles from '../../src/util/searchSourceFiles';
 
 it('should returns all source files', async () => {
 	const files = await searchSourceFiles('test/sample');
