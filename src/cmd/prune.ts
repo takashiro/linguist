@@ -1,5 +1,6 @@
 import * as path from 'path';
 
+import { Config } from '../base/Config';
 import MessageBundle from '../base/MessageBundle';
 import searchSourceFiles from '../util/searchSourceFiles';
 import extractMessages from '../util/extractMessages';
@@ -7,16 +8,10 @@ import extractMessages from '../util/extractMessages';
 export const command = 'prune';
 export const describe = 'Remove non-existing messages from bundles.';
 
-interface Arguments {
-	locales: string;
-	sourceDir: string;
-	messageDir: string;
-}
-
-export async function handler(argv: Arguments): Promise<void> {
+export async function handler(argv: Config): Promise<void> {
 	console.log('Searching source files...');
 	const sourceFiles = await searchSourceFiles(argv.sourceDir);
-	const messages = extractMessages(sourceFiles, (filePath) => {
+	const messages = extractMessages(sourceFiles, argv.overrideIdFn, (filePath) => {
 		console.log(`Parsing ${filePath}`);
 	});
 	const locales = argv.locales.split(',');

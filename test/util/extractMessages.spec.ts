@@ -22,7 +22,7 @@ it('should notify progress state', () => {
 	extractMessages([
 		'test/sample/Box.tsx',
 		'test/sample/messages.ts',
-	], callback);
+	], undefined, callback);
 	expect(callback).toBeCalledTimes(2);
 	expect(callback).nthCalledWith(1, path.join('test', 'sample', 'Box.tsx'));
 	expect(callback).nthCalledWith(2, path.normalize('test/sample/messages.ts'));

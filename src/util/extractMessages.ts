@@ -1,6 +1,11 @@
 import * as path from 'path';
 import * as ts from 'typescript';
-import { transform, MessageDescriptor } from '@formatjs/ts-transformer';
+import {
+	transform,
+	MessageDescriptor,
+	InterpolateNameFn,
+	Opts,
+} from '@formatjs/ts-transformer';
 
 const compilerOptions = {
 	jsx: ts.JsxEmit.React,
@@ -16,9 +21,17 @@ const compilerOptions = {
 
 type ProgressCallback = (filePath: string) => void;
 
-function extractMessages(sourceFiles: string[], progressCallback?: ProgressCallback): MessageDescriptor[] {
+function extractMessages(sourceFiles: string[], overrideIdFn?: string | InterpolateNameFn, progressCallback?: ProgressCallback): MessageDescriptor[] {
 	const messages: MessageDescriptor[] = [];
 	const program = ts.createProgram(sourceFiles, compilerOptions);
+	const opts: Opts = {
+		onMsgExtracted(filePath: string, msgs: MessageDescriptor[]): void {
+			messages.push(...msgs);
+		},
+	};
+	if (overrideIdFn !== undefined) {
+		opts.overrideIdFn = overrideIdFn;
+	}
 	program.emit(undefined, (output, data, writeByteOrderMark, onError, input) => {
 		if (input && progressCallback) {
 			for (const sourceFile of input) {
@@ -27,11 +40,7 @@ function extractMessages(sourceFiles: string[], progressCallback?: ProgressCallb
 		}
 	}, undefined, undefined, {
 		before: [
-			transform({
-				onMsgExtracted(filePath: string, msgs: MessageDescriptor[]): void {
-					messages.push(...msgs);
-				},
-			}),
+			transform(opts),
 		],
 	});
 	return messages;
