@@ -6,6 +6,8 @@ import { SourceFile, TransformerFactory } from 'typescript';
 
 import { Config, parse } from './base/Config';
 
+export { Config } from './base/Config';
+
 export interface TransformOptions extends Opts {
 	config?: string;
 }
