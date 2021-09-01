@@ -11,17 +11,10 @@ function Box() {
 			</div>
 			<div className="entrance-form">
 				<button type="submit" onClick={this.createRoom}>
-					<FormattedMessage id="create-room" defaultMessage="Create Room" />
+					<FormattedMessage defaultMessage="Happy Work" />
 				</button>
-				<input
-					id="room-number-input"
-					type="number"
-					className="room-number"
-					placeholder="房间号"
-					maxLength={8}
-				/>
 				<button type="submit">
-					<FormattedMessage defaultMessage="Enter Room" />
+					<FormattedMessage defaultMessage="Happy Life" />
 				</button>
 			</div>
 		</div>
