@@ -15,10 +15,6 @@ const { argv } = yargs
 		describe: 'The directory to save message bundles.',
 		default: 'message',
 	})
-	.option('outDir', {
-		describe: 'The directory to save minified JavaScript files of message bundles.',
-		default: 'dist/message',
-	})
 	.option('overrideIdFn', {
 		describe: 'Assign an automatic message id if no explicit id is defined.',
 	})

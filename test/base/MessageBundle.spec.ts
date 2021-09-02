@@ -53,23 +53,46 @@ it('should merge duplicate messages and skip invalid messages', async () => {
 	save.mockRestore();
 });
 
-it('should be released in JavaScript.', async () => {
+it('should be released', async () => {
 	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc3, desc4]);
+	const message = await bundle.release();
+	expect(message).toStrictEqual({
+		test3: 'okay',
+	});
+	read.mockRestore();
+});
+
+it('should be released in JavaScript.', async () => {
+	const release = jest.spyOn(bundle, 'release').mockResolvedValue({
+		test4: 'ok',
+	});
 	const out = path.join(os.tmpdir(), 'tmp.js');
-	await bundle.release(out);
+	await bundle.releaseJs(out, 'test');
 	const outContent = await readFile(out, 'utf-8');
 	await unlink(out);
 	const window = {
-		linguist: {},
+		test: {},
 	};
 	// eslint-disable-next-line no-eval
 	eval(outContent);
-	expect(window.linguist).toStrictEqual({
-		messages: {
-			test3: 'okay',
-		},
+	expect(window.test).toStrictEqual({
+		test4: 'ok',
 	});
-	read.mockRestore();
+	release.mockRestore();
+});
+
+it('should be released in JSON format', async () => {
+	const release = jest.spyOn(bundle, 'release').mockResolvedValue({
+		test5: 'wow',
+	});
+	const out = path.join(os.tmpdir(), 'tmp.json');
+	await bundle.releaseJson(out);
+	const output = JSON.parse(await readFile(out, 'utf-8'));
+	await unlink(out);
+	expect(output).toStrictEqual({
+		test5: 'wow',
+	});
+	release.mockRestore();
 });
 
 it('should remove invalid messages', async () => {

@@ -17,11 +17,6 @@ export interface Config {
 	messageDir: string;
 
 	/**
-	 * The directory to release i18n files. Default: 'dist/message'.
-	 */
-	outDir: string;
-
-	/**
 	 * If no explicit id is defined, generate an automatic id for the message.
 	 */
 	overrideIdFn: string | InterpolateNameFn;

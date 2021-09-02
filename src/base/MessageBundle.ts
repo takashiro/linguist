@@ -74,7 +74,7 @@ export default class MessageBundle {
 		await writeFile(this.filePath, JSON.stringify(messages, undefined, '\t'));
 	}
 
-	async release(outputPath: string): Promise<void> {
+	async release(): Promise<Record<string, string>> {
 		const content = await this.read();
 		const messages: Record<string, string> = {};
 		for (const desc of content) {
@@ -82,6 +82,16 @@ export default class MessageBundle {
 				messages[desc.id] = desc.message;
 			}
 		}
-		await writeFile(outputPath, `window.linguist = { messages: ${JSON.stringify(messages)} };`);
+		return messages;
+	}
+
+	async releaseJs(outputPath: string, variableName: string): Promise<void> {
+		const messages = await this.release();
+		await writeFile(outputPath, `window.${variableName} = ${JSON.stringify(messages)};`);
+	}
+
+	async releaseJson(outputPath: string): Promise<void> {
+		const messages = await this.release();
+		await writeFile(outputPath, JSON.stringify(messages));
 	}
 }
