@@ -19,7 +19,7 @@ export interface Config {
 	/**
 	 * The directory to release i18n files. Default: 'dist/message'.
 	 */
-	distDir: string;
+	outDir: string;
 
 	/**
 	 * If no explicit id is defined, generate an automatic id for the message.

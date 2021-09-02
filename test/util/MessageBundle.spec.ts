@@ -62,6 +62,7 @@ it('should be released in JavaScript.', async () => {
 	const window = {
 		linguist: {},
 	};
+	// eslint-disable-next-line no-eval
 	eval(outContent);
 	expect(window.linguist).toStrictEqual({
 		messages: {
