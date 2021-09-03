@@ -75,6 +75,22 @@ it('should merge duplicate messages and skip invalid messages', async () => {
 	expect(save).toBeCalledWith(bundleContent3);
 });
 
+it('should clear existing message if default message is changed', async () => {
+	save.mockResolvedValueOnce();
+	await bundle.update([{
+		id: 'test3',
+		defaultMessage: 'new',
+	}]);
+	expect(save).toBeCalledWith([
+		...bundleContent2,
+		{
+			id: 'test3',
+			defaultMessage: 'new',
+			message: '',
+		},
+	]);
+});
+
 it('should be released', async () => {
 	read.mockResolvedValueOnce([desc3, desc4]);
 	const message = await bundle.release();

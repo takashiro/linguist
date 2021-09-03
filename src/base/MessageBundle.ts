@@ -57,8 +57,9 @@ export default class MessageBundle {
 					message: '',
 					...desc,
 				});
-			} else {
+			} else if (descriptor.defaultMessage !== desc.defaultMessage) {
 				Object.assign(descriptor, desc);
+				descriptor.message = '';
 			}
 		}
 
