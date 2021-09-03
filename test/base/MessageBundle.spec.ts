@@ -24,6 +24,22 @@ const desc3: MessageDescriptor = {
 };
 const desc4 = {} as unknown as MessageDescriptor;
 
+const bundleContent2: MessageDescriptor[] = [
+	{
+		...desc1,
+		message: '',
+	},
+	{
+		...desc2,
+		message: '',
+	},
+];
+
+const bundleContent3: MessageDescriptor[] = [
+	...bundleContent2,
+	desc3,
+];
+
 afterAll(async () => {
 	await unlink(bundle.getFilePath());
 });
@@ -32,13 +48,13 @@ it('should save messages', async () => {
 	const save = jest.spyOn(bundle, 'save');
 	await bundle.update([desc1, desc2]);
 	expect(save).toBeCalledTimes(1);
-	expect(save).toBeCalledWith([desc1, desc2]);
+	expect(save).toBeCalledWith(bundleContent2);
 	save.mockRestore();
 });
 
 it('should read messages', async () => {
 	const descriptors = await bundle.read();
-	expect(descriptors).toStrictEqual([desc1, desc2]);
+	expect(descriptors).toStrictEqual(bundleContent2);
 });
 
 it('should merge duplicate messages and skip invalid messages', async () => {
@@ -49,7 +65,7 @@ it('should merge duplicate messages and skip invalid messages', async () => {
 		desc4,
 	]);
 	expect(save).toBeCalledTimes(1);
-	expect(save).toBeCalledWith([desc1, desc2, desc3]);
+	expect(save).toBeCalledWith(bundleContent3);
 	save.mockRestore();
 });
 

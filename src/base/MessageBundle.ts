@@ -9,13 +9,13 @@ import MessageDescriptor from './MessageDescriptor';
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
-function convertToMap(messages: MessageDescriptor[]): Map<string, MessageDescriptor> {
+function convertToMap(descriptors: MessageDescriptor[]): Map<string, MessageDescriptor> {
 	const map = new Map<string, MessageDescriptor>();
-	for (const message of messages) {
-		if (!message.id) {
+	for (const desc of descriptors) {
+		if (!desc.id) {
 			continue;
 		}
-		map.set(message.id, message);
+		map.set(desc.id, desc);
 	}
 	return map;
 }
@@ -42,20 +42,23 @@ export default class MessageBundle {
 		return messages;
 	}
 
-	async update(messages: MessageDescriptor[]): Promise<void> {
+	async update(descriptors: MessageDescriptor[]): Promise<void> {
 		const oldContent = await this.read();
 		const map = convertToMap(oldContent);
 
-		for (const message of messages) {
-			if (!message.id) {
+		for (const desc of descriptors) {
+			if (!desc.id) {
 				continue;
 			}
 
-			const descriptor = map.get(message.id);
+			const descriptor = map.get(desc.id);
 			if (!descriptor) {
-				map.set(message.id, message);
+				map.set(desc.id, {
+					message: '',
+					...desc,
+				});
 			} else {
-				Object.assign(descriptor, message);
+				Object.assign(descriptor, desc);
 			}
 		}
 
