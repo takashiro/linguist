@@ -20,6 +20,7 @@ const desc2: MessageDescriptor = {
 };
 const desc3: MessageDescriptor = {
 	id: 'test3',
+	defaultMessage: 'okay',
 	message: 'okay',
 };
 const desc4 = {} as unknown as MessageDescriptor;
@@ -40,16 +41,23 @@ const bundleContent3: MessageDescriptor[] = [
 	desc3,
 ];
 
+const save = jest.spyOn(bundle, 'save');
+const read = jest.spyOn(bundle, 'read');
+const release = jest.spyOn(bundle, 'release');
+
 afterAll(async () => {
 	await unlink(bundle.getFilePath());
 });
 
+afterEach(() => {
+	save.mockClear();
+	read.mockClear();
+});
+
 it('should save messages', async () => {
-	const save = jest.spyOn(bundle, 'save');
 	await bundle.update([desc1, desc2]);
 	expect(save).toBeCalledTimes(1);
 	expect(save).toBeCalledWith(bundleContent2);
-	save.mockRestore();
 });
 
 it('should read messages', async () => {
@@ -58,7 +66,6 @@ it('should read messages', async () => {
 });
 
 it('should merge duplicate messages and skip invalid messages', async () => {
-	const save = jest.spyOn(bundle, 'save').mockResolvedValue();
 	await bundle.update([
 		desc2,
 		desc3,
@@ -66,20 +73,18 @@ it('should merge duplicate messages and skip invalid messages', async () => {
 	]);
 	expect(save).toBeCalledTimes(1);
 	expect(save).toBeCalledWith(bundleContent3);
-	save.mockRestore();
 });
 
 it('should be released', async () => {
-	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc3, desc4]);
+	read.mockResolvedValueOnce([desc3, desc4]);
 	const message = await bundle.release();
 	expect(message).toStrictEqual({
 		test3: 'okay',
 	});
-	read.mockRestore();
 });
 
 it('should be released in JavaScript.', async () => {
-	const release = jest.spyOn(bundle, 'release').mockResolvedValue({
+	release.mockResolvedValueOnce({
 		test4: 'ok',
 	});
 	const out = path.join(os.tmpdir(), 'tmp.js');
@@ -94,11 +99,10 @@ it('should be released in JavaScript.', async () => {
 	expect(window.test).toStrictEqual({
 		test4: 'ok',
 	});
-	release.mockRestore();
 });
 
 it('should be released in JSON format', async () => {
-	const release = jest.spyOn(bundle, 'release').mockResolvedValue({
+	release.mockResolvedValueOnce({
 		test5: 'wow',
 	});
 	const out = path.join(os.tmpdir(), 'tmp.json');
@@ -108,25 +112,20 @@ it('should be released in JSON format', async () => {
 	expect(output).toStrictEqual({
 		test5: 'wow',
 	});
-	release.mockRestore();
 });
 
 it('should remove invalid messages', async () => {
-	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc1, desc4]);
-	const save = jest.spyOn(bundle, 'save').mockResolvedValue();
+	read.mockResolvedValueOnce([desc1, desc4]);
+	save.mockResolvedValueOnce();
 	await bundle.update([]);
 	expect(save).toBeCalledTimes(1);
 	expect(save).toBeCalledWith([desc1]);
-	read.mockRestore();
-	save.mockRestore();
 });
 
 it('should prune unused messages', async () => {
-	const read = jest.spyOn(bundle, 'read').mockResolvedValue([desc1, desc2]);
-	const save = jest.spyOn(bundle, 'save').mockResolvedValue();
+	read.mockResolvedValueOnce([desc1, desc2]);
+	save.mockResolvedValueOnce();
 	await bundle.prune([desc2, desc3]);
 	expect(save).toBeCalledTimes(1);
 	expect(save).toBeCalledWith([desc2]);
-	read.mockRestore();
-	save.mockRestore();
 });
