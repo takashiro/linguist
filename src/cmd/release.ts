@@ -47,8 +47,8 @@ export function builder(argv: Argv): Argv {
 export async function handler(argv: ReleaseArgs): Promise<void> {
 	const locales = argv.locales.split(',');
 	for (const localeId of locales) {
-		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.${argv.format}`));
-		const releasePath = path.join(argv.outDir, `${localeId}.js`);
+		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
+		const releasePath = path.join(argv.outDir, `${localeId}.${argv.format}`);
 		console.log(`Generating ${releasePath} from ${bundle.getFilePath()}`);
 		if (argv.format === ReleaseFormat.JS) {
 			await bundle.releaseJs(releasePath, argv.globalVariable);
