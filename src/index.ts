@@ -12,7 +12,7 @@ export interface TransformOptions extends Opts {
 	config?: string;
 }
 
-export function transform(options: TransformOptions): TransformerFactory<SourceFile> {
+export function transform(options: TransformOptions = {}): TransformerFactory<SourceFile> {
 	const config: Partial<Config> = options.config ? parse(options.config) : {};
 	if (!options.overrideIdFn) {
 		options.overrideIdFn = config.overrideIdFn;
