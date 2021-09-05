@@ -54,8 +54,10 @@ export default class MessageBundle {
 			const descriptor = map.get(desc.id);
 			if (!descriptor) {
 				map.set(desc.id, {
+					id: desc.id,
+					defaultMessage: desc.defaultMessage,
+					description: desc.description,
 					message: '',
-					...desc,
 				});
 			} else if (descriptor.defaultMessage !== desc.defaultMessage) {
 				Object.assign(descriptor, desc);

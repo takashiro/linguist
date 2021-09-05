@@ -38,7 +38,11 @@ const bundleContent2: MessageDescriptor[] = [
 
 const bundleContent3: MessageDescriptor[] = [
 	...bundleContent2,
-	desc3,
+	{
+		id: 'test3',
+		defaultMessage: 'okay',
+		message: '',
+	},
 ];
 
 const save = jest.spyOn(bundle, 'save');
