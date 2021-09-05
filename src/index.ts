@@ -1,3 +1,4 @@
+import * as path from 'path';
 import {
 	Opts,
 	transform as formatJsTransform,
@@ -13,7 +14,8 @@ export interface TransformOptions extends Opts {
 }
 
 export function transform(options: TransformOptions = {}): TransformerFactory<SourceFile> {
-	const config: Partial<Config> = options.config ? parse(options.config) : {};
+	const configPath = path.resolve(process.cwd(), options.config || '.linguistrc.js');
+	const config: Partial<Config> = parse(configPath);
 	if (!options.overrideIdFn) {
 		options.overrideIdFn = config.overrideIdFn;
 	}
