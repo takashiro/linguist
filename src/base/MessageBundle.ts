@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as util from 'util';
-
 import * as mkdirp from 'mkdirp';
 
 import MessageDescriptor from './MessageDescriptor';
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+const {
+	readFile,
+	writeFile,
+} = fs.promises;
 
 function convertToMap(descriptors: MessageDescriptor[]): Map<string, MessageDescriptor> {
 	const map = new Map<string, MessageDescriptor>();
@@ -76,8 +76,16 @@ export default class MessageBundle {
 		await this.save(newContent);
 	}
 
-	async save(messages: MessageDescriptor[]): Promise<void> {
-		await writeFile(this.filePath, JSON.stringify(messages, undefined, '\t'));
+	save(messages: MessageDescriptor[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const output = fs.createWriteStream(this.filePath);
+			output.once('error', reject);
+			output.once('close', resolve);
+
+			output.write(JSON.stringify(messages, undefined, '\t'));
+			output.write('\n');
+			output.close();
+		});
 	}
 
 	async release(): Promise<Record<string, string>> {
