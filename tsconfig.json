@@ -2,7 +2,8 @@
 	"compilerOptions": {
 		"outDir": "bin",
 		"declaration": true,
-		"module": "commonjs",
+		"target": "ES2019",
+		"module": "CommonJS",
 		"moduleResolution": "node",
 		"strict": true
 	},
