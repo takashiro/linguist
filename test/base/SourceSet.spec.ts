@@ -1,4 +1,5 @@
 import * as path from 'path';
+import ts from 'typescript';
 
 import SourceSet from '../../src/base/SourceSet';
 
@@ -50,4 +51,18 @@ it('should search JavaScript source files', async () => {
 	expect(set.getSize()).toBe(2);
 	const messages = set.extractMessages();
 	expect(messages).toHaveLength(4);
+});
+
+it('should handle undefined input from TypesSript compiler', () => {
+	const emit = jest.fn();
+	const program = {
+		emit,
+	} as unknown as ts.Program;
+	const createProgram = jest.spyOn(ts, 'createProgram').mockReturnValueOnce(program);
+	const set = new SourceSet();
+	set.extractMessages();
+	expect(emit).toBeCalledTimes(1);
+	const [, callback] = emit.mock.calls[0];
+	callback();
+	createProgram.mockRestore();
 });
