@@ -1,4 +1,4 @@
-import * as path from 'path';
+import path from 'path';
 import { Argv } from 'yargs';
 
 import { Config } from '../base/Config';

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
-import * as path from 'path';
-import * as ts from 'typescript';
+import path from 'path';
+import ts from 'typescript';
 import { Glob } from 'glob';
 import {
 	transform,

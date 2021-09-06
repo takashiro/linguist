@@ -1,4 +1,4 @@
-import * as path from 'path';
+import path from 'path';
 
 import { Config } from '../base/Config';
 import MessageBundle from '../base/MessageBundle';

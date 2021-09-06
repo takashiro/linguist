@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import * as yargs from 'yargs';
-import * as assert from 'assert';
+import yargs from 'yargs';
+import assert from 'assert';
 
 const { argv } = yargs
 	.option('locales', {

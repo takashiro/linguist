@@ -1,13 +1,14 @@
-import * as fs from 'fs';
-import * as os from 'os';
-import * as path from 'path';
-import * as util from 'util';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 
 import MessageBundle from '../../src/base/MessageBundle';
 import MessageDescriptor from '../../src/base/MessageDescriptor';
 
-const readFile = util.promisify(fs.readFile);
-const unlink = util.promisify(fs.unlink);
+const {
+	readFile,
+	unlink,
+} = fs.promises;
 
 const bundle = new MessageBundle(path.join(os.tmpdir(), 'zh-CN.json'));
 
