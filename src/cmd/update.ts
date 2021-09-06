@@ -4,18 +4,29 @@ import { Config } from '../base/Config';
 import MessageBundle from '../base/MessageBundle';
 import SourceSet from '../base/SourceSet';
 
-export const command = 'update';
-export const describe = 'Extract messages from source files and update message bundles.';
+export const command = 'update [sourcePattern]';
+export const describe = 'Extract messages from source files and update message bundles. If sourcePattern is not defined, source directory will be used.';
 
-export async function handler(argv: Config): Promise<void> {
+interface UpdateArgs extends Config {
+	sourcePattern?: string;
+}
+
+export async function handler(argv: UpdateArgs): Promise<void> {
 	const sourceSet = new SourceSet();
 	sourceSet.setOverrideIdFn(argv.overrideIdFn);
 
-	console.log('Searching source files...');
-	sourceSet.on('added', (filePath) => {
-		console.log(`Found ${filePath}`);
-	});
-	await sourceSet.addDirectory(argv.sourceDir);
+	if (argv.sourcePattern) {
+		await sourceSet.addFiles(argv.sourcePattern);
+	} else if (argv.sourceDir) {
+		console.log('Searching source files...');
+		sourceSet.on('added', (filePath) => {
+			console.log(`Found ${filePath}`);
+		});
+		await sourceSet.addDirectory(argv.sourceDir);
+	} else {
+		console.error('Please define a source directory (sourceDir) in the configuration file.');
+		process.exit(1);
+	}
 
 	sourceSet.on('extracted', (filePath) => {
 		console.log(`Parsing ${filePath}`);
