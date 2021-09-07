@@ -1,13 +1,20 @@
 import fs from 'fs';
 import path from 'path';
-import mkdirp from 'mkdirp';
 
 import MessageDescriptor from './MessageDescriptor';
 
 const {
 	readFile,
 	writeFile,
+	mkdir,
 } = fs.promises;
+
+async function prepareDir(filePath: string): Promise<void> {
+	const fileDir = path.dirname(filePath);
+	if (!fs.existsSync(fileDir)) {
+		await mkdir(fileDir, { recursive: true });
+	}
+}
 
 function convertToMap(descriptors: MessageDescriptor[]): Map<string, MessageDescriptor> {
 	const map = new Map<string, MessageDescriptor>();
@@ -33,7 +40,6 @@ export default class MessageBundle {
 
 	async read(): Promise<MessageDescriptor[]> {
 		if (!fs.existsSync(this.filePath)) {
-			await mkdirp(path.dirname(this.filePath));
 			return [];
 		}
 
@@ -101,11 +107,25 @@ export default class MessageBundle {
 
 	async releaseJs(outputPath: string, variableName: string): Promise<void> {
 		const messages = await this.release();
-		await writeFile(outputPath, `window.${variableName} = ${JSON.stringify(messages)};`);
+		await prepareDir(outputPath);
+
+		return new Promise((resolve, reject) => {
+			const output = fs.createWriteStream(outputPath);
+			output.once('error', reject);
+			output.once('close', resolve);
+
+			output.write('window.');
+			output.write(variableName);
+			output.write('=');
+			output.write(JSON.stringify(messages));
+			output.write(';');
+			output.close();
+		});
 	}
 
 	async releaseJson(outputPath: string): Promise<void> {
 		const messages = await this.release();
+		await prepareDir(outputPath);
 		await writeFile(outputPath, JSON.stringify(messages));
 	}
 }

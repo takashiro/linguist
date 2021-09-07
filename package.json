@@ -30,7 +30,6 @@
   "devDependencies": {
     "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.1",
-    "@types/mkdirp": "^1.0.2",
     "@types/node": "^14.17.14",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
@@ -44,7 +43,6 @@
   "dependencies": {
     "@formatjs/ts-transformer": "^3.4.10",
     "glob": "^7.1.7",
-    "mkdirp": "^1.0.4",
     "typescript": "^4.4.2",
     "yargs": "^17.1.1"
   }

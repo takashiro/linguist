@@ -8,6 +8,7 @@ import MessageDescriptor from '../../src/base/MessageDescriptor';
 const {
 	readFile,
 	unlink,
+	rmdir,
 } = fs.promises;
 
 const bundle = new MessageBundle(path.join(os.tmpdir(), 'zh-CN.json'));
@@ -126,10 +127,12 @@ it('should be released in JSON format', async () => {
 	release.mockResolvedValueOnce({
 		test5: 'wow',
 	});
-	const out = path.join(os.tmpdir(), 'tmp.json');
+	const out = path.join(os.tmpdir(), 'linguist/release/tmp.json');
 	await bundle.releaseJson(out);
 	const output = JSON.parse(await readFile(out, 'utf-8'));
 	await unlink(out);
+	await rmdir(path.join(os.tmpdir(), 'linguist', 'release'));
+	await rmdir(path.join(os.tmpdir(), 'linguist'));
 	expect(output).toStrictEqual({
 		test5: 'wow',
 	});
