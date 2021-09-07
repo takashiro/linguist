@@ -4,7 +4,7 @@ export interface Config {
 	/**
 	 * Supported locales of the application. Each locale has a separate file. Default: en-US, zh-CN.
 	 */
-	locales: string;
+	locales: string[];
 
 	/**
 	 * The directory to look for source files. Default: 'src'.

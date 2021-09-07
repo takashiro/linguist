@@ -45,7 +45,7 @@ export function builder(argv: Argv): Argv {
 }
 
 export async function handler(argv: ReleaseArgs): Promise<void> {
-	const locales = argv.locales.split(',');
+	const { locales } = argv;
 	for (const localeId of locales) {
 		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
 		const releasePath = path.join(argv.outDir, `${localeId}.${argv.format}`);

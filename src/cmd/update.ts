@@ -33,7 +33,7 @@ export async function handler(argv: UpdateArgs): Promise<void> {
 	});
 	const messages = sourceSet.extractMessages();
 
-	const locales = argv.locales.split(',');
+	const { locales } = argv;
 	for (const localeId of locales) {
 		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
 		console.log(`Updating ${bundle.getFilePath()}`);

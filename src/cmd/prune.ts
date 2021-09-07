@@ -23,7 +23,7 @@ export async function handler(argv: Config): Promise<void> {
 	});
 	const messages = sourceSet.extractMessages();
 
-	const locales = argv.locales.split(',');
+	const { locales } = argv;
 	for (const localeId of locales) {
 		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
 		console.log(`Pruning ${bundle.getFilePath()}`);

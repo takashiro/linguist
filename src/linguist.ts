@@ -5,7 +5,8 @@ import assert from 'assert';
 const { argv } = yargs
 	.option('locales', {
 		describe: 'Define supported locales',
-		default: 'en-US,zh-CN',
+		type: 'array',
+		default: 'en-US',
 	})
 	.option('sourceDir', {
 		describe: 'The directory to search source files.',
