@@ -1,4 +1,4 @@
-Linguist
+Linguist [![npm version](https://badge.fury.io/js/@karuta%2Flinguist.svg)](https://badge.fury.io/js/@karuta%2Flinguist) [![Node.js CI](https://github.com/takashiro/linguist/actions/workflows/nodejs.yml/badge.svg)](https://github.com/takashiro/linguist/actions/workflows/nodejs.yml)
 ========
 
 A project inspired by FormatJS and Qt Linguist
@@ -30,7 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	```
 
 1. For React projects, install `react-intl` and wrap your messages.
-		
+
 	```TypeScript
 	import {
 		useIntl,
@@ -59,7 +59,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	}
 
 	// Directly use <FormattedMessage>
-	export function YourComponentB(): JSX.Element {		
+	export function YourComponentB(): JSX.Element {
 		return (
 			<FormattedMessage defaultMessage="This is a test." />
 		);
@@ -123,7 +123,7 @@ module.exports = {
 	 * If no explicit id is defined, generate an automatic id for the message.
 	 */
 	overrideIdFn: '[sha512:contenthash:base64:6]',
-	
+
 	/**
 	 * The directory to look for source files. Default: 'src'.
 	 */
