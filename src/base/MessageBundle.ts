@@ -72,6 +72,7 @@ export default class MessageBundle {
 		}
 
 		const newContent = Array.from(map.values());
+		newContent.sort((a, b) => a.id.localeCompare(b.id));
 		await this.save(newContent);
 	}
 

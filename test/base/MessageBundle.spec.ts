@@ -61,7 +61,7 @@ afterEach(() => {
 });
 
 it('should save messages', async () => {
-	await bundle.update([desc1, desc2]);
+	await bundle.update([desc2, desc1]);
 	expect(save).toBeCalledTimes(1);
 	expect(save).toBeCalledWith(bundleContent2);
 });
@@ -73,8 +73,8 @@ it('should read messages', async () => {
 
 it('should merge duplicate messages and skip invalid messages', async () => {
 	await bundle.update([
-		desc2,
 		desc3,
+		desc2,
 		desc4,
 	]);
 	expect(save).toBeCalledTimes(1);
