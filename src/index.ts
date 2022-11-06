@@ -19,5 +19,8 @@ export function transform(options: TransformOptions = {}): TransformerFactory<So
 	if (!options.overrideIdFn) {
 		options.overrideIdFn = config.overrideIdFn;
 	}
+	if (options.ast === undefined) {
+		options.ast = config.ast;
+	}
 	return formatJsTransform(options);
 }

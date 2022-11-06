@@ -26,6 +26,10 @@ const desc3: MessageDescriptor = {
 	message: 'okay',
 };
 const desc4 = {} as unknown as MessageDescriptor;
+const desc5: MessageDescriptor = {
+	id: 'test5',
+	message: 'Room {id}',
+};
 
 const bundleContent2: MessageDescriptor[] = [
 	{
@@ -152,4 +156,16 @@ it('should prune unused messages', async () => {
 	await bundle.prune([desc2, desc3]);
 	expect(save).toBeCalledTimes(1);
 	expect(save).toBeCalledWith([desc2]);
+});
+
+it('should release in AST format', async () => {
+	bundle.setAst(true);
+	read.mockResolvedValueOnce([desc5]);
+	const res = await bundle.release();
+	expect(res).toStrictEqual({
+		test5: [
+			{ type: 0, value: 'Room ' },
+			{ type: 1, value: 'id' },
+		],
+	});
 });

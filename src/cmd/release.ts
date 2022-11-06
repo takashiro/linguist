@@ -8,22 +8,7 @@ import ReleaseFormat from '../base/ReleaseFormat';
 export const command = 'release';
 export const describe = 'Create JavaScript files of message bundles.';
 
-interface ReleaseArgs extends Config {
-	/**
-	 * The directory to release i18n files. Default: 'dist/message'.
-	 */
-	outDir: string;
-
-	/**
-	 * File format of released messages
-	 */
-	format: ReleaseFormat;
-
-	/**
-	 * If released in *.js format, define a global variable to store i18n messages.
-	 */
-	globalVariable: string;
-}
+type ReleaseArgs = Config;
 
 export function builder(argv: Argv): Argv {
 	return argv
@@ -41,6 +26,11 @@ export function builder(argv: Argv): Argv {
 			description: 'Global variable name of messages (For *.js format only)',
 			type: 'string',
 			default: 'linguist',
+		})
+		.option('ast', {
+			description: 'Whether to use AST format',
+			type: 'boolean',
+			default: true,
 		});
 }
 
@@ -48,6 +38,7 @@ export async function handler(argv: ReleaseArgs): Promise<void> {
 	const { locales } = argv;
 	for (const localeId of locales) {
 		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
+		bundle.setAst(argv.ast);
 		const releasePath = path.join(argv.outDir, `${localeId}.${argv.format}`);
 		console.log(`Generating ${releasePath} from ${bundle.getFilePath()}`);
 		if (argv.format === ReleaseFormat.JS) {

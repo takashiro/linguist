@@ -1,7 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import { MessageFormatElement, parse } from '@formatjs/icu-messageformat-parser';
 
 import MessageDescriptor from './MessageDescriptor';
+
+type RawMessageBundle = Record<string, string>;
+
+type AstMessageBundle = Record<string, MessageFormatElement[]>;
 
 const {
 	readFile,
@@ -30,12 +35,22 @@ function convertToMap(descriptors: MessageDescriptor[]): Map<string, MessageDesc
 export default class MessageBundle {
 	protected filePath: string;
 
+	protected ast = false;
+
 	constructor(filePath: string) {
 		this.filePath = filePath;
 	}
 
 	getFilePath(): string {
 		return this.filePath;
+	}
+
+	isAst(): boolean {
+		return this.ast;
+	}
+
+	setAst(ast: boolean): void {
+		this.ast = ast;
 	}
 
 	async read(): Promise<MessageDescriptor[]> {
@@ -95,9 +110,24 @@ export default class MessageBundle {
 		});
 	}
 
-	async release(): Promise<Record<string, string>> {
+	async release(): Promise<AstMessageBundle | RawMessageBundle> {
+		return this.isAst() ? this.releaseAst() : this.releaseRaw();
+	}
+
+	async releaseAst(): Promise<AstMessageBundle> {
 		const content = await this.read();
-		const messages: Record<string, string> = {};
+		const messages: AstMessageBundle = {};
+		for (const desc of content) {
+			if (desc.id && desc.message) {
+				messages[desc.id] = parse(desc.message);
+			}
+		}
+		return messages;
+	}
+
+	async releaseRaw(): Promise<RawMessageBundle> {
+		const content = await this.read();
+		const messages: RawMessageBundle = {};
 		for (const desc of content) {
 			if (desc.id && desc.message) {
 				messages[desc.id] = desc.message;

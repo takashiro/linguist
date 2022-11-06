@@ -32,6 +32,11 @@ export interface Config {
 	format: string;
 
 	/**
+	 * Whether to use AST format.
+	 */
+	ast: boolean;
+
+	/**
 	 * Global variable name of messages (For *.js format only) (Default: 'linguist')
 	 */
 	globalVariable: string;
