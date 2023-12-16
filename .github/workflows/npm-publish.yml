@@ -17,9 +17,26 @@ jobs:
           node-version: 18
           scope: karuta
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-      - run: npm publish --access=public
+      -
+        name: Install
+        run: npm ci
+      -
+        name: Build
+        run: npm run build
+      -
+        name: Package
+        run: |
+          cd dist
+          cp ../package.json .
+          cp ../LICENSE .
+          cp ../README.md .
+          npm pkg set bin.linguist=linguist.js
+          npm pkg set main=index.js
+          npm pkg delete scripts
+          npm pkg delete files
+          npm pkg delete devDependencies
+      -
+        name: Publish
+        run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
