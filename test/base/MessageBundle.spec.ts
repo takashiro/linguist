@@ -66,8 +66,8 @@ afterEach(() => {
 
 it('should save messages', async () => {
 	await bundle.update([desc2, desc1]);
-	expect(save).toBeCalledTimes(1);
-	expect(save).toBeCalledWith(bundleContent2);
+	expect(save).toHaveBeenCalledTimes(1);
+	expect(save).toHaveBeenCalledWith(bundleContent2);
 });
 
 it('should read messages', async () => {
@@ -81,8 +81,8 @@ it('should merge duplicate messages and skip invalid messages', async () => {
 		desc2,
 		desc4,
 	]);
-	expect(save).toBeCalledTimes(1);
-	expect(save).toBeCalledWith(bundleContent3);
+	expect(save).toHaveBeenCalledTimes(1);
+	expect(save).toHaveBeenCalledWith(bundleContent3);
 });
 
 it('should clear existing message if default message is changed', async () => {
@@ -91,7 +91,7 @@ it('should clear existing message if default message is changed', async () => {
 		id: 'test3',
 		defaultMessage: 'new',
 	}]);
-	expect(save).toBeCalledWith([
+	expect(save).toHaveBeenCalledWith([
 		...bundleContent2,
 		{
 			id: 'test3',
@@ -146,16 +146,16 @@ it('should remove invalid messages', async () => {
 	read.mockResolvedValueOnce([desc1, desc4]);
 	save.mockResolvedValueOnce();
 	await bundle.update([]);
-	expect(save).toBeCalledTimes(1);
-	expect(save).toBeCalledWith([desc1]);
+	expect(save).toHaveBeenCalledTimes(1);
+	expect(save).toHaveBeenCalledWith([desc1]);
 });
 
 it('should prune unused messages', async () => {
 	read.mockResolvedValueOnce([desc1, desc2]);
 	save.mockResolvedValueOnce();
 	await bundle.prune([desc2, desc3]);
-	expect(save).toBeCalledTimes(1);
-	expect(save).toBeCalledWith([desc2]);
+	expect(save).toHaveBeenCalledTimes(1);
+	expect(save).toHaveBeenCalledWith([desc2]);
 });
 
 it('should release in AST format', async () => {

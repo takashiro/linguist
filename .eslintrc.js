@@ -49,6 +49,7 @@ module.exports = {
 		'no-tabs': 'off',
 		'no-undef': 'off',
 		'prefer-arrow-callback': 'off',
+		'@typescript-eslint/no-unsafe-declaration-merging': 'off',
 	},
 	settings: {
 		'import/resolver': {

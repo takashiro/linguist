@@ -59,16 +59,14 @@ class SourceSet extends EventEmitter {
 	}
 
 	async addDirectory(sourceDir: string, extensions = ['ts', 'tsx']): Promise<void> {
-		await this.addFiles(`${sourceDir}/**/*.@(${extensions.join('|')})`);
+		await this.addFiles(`${sourceDir}/**/*.{${extensions.join(',')}}`);
 	}
 
-	addFiles(pattern: string): Promise<void> {
-		const glob = new Glob(pattern);
-		glob.on('match', (filePath) => this.addFile(filePath));
-		return new Promise((resolve, reject) => {
-			glob.once('error', reject);
-			glob.once('end', resolve);
-		});
+	async addFiles(pattern: string): Promise<void> {
+		const glob = new Glob(pattern, {});
+		for await (const filePath of glob) {
+			this.addFile(filePath);
+		}
 	}
 
 	extractMessages(): MessageDescriptor[] {
