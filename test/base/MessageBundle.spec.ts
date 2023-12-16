@@ -1,3 +1,10 @@
+import {
+	jest,
+	afterAll,
+	afterEach,
+	expect,
+	it,
+} from '@jest/globals';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';

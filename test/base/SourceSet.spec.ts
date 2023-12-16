@@ -1,3 +1,8 @@
+import {
+	jest,
+	it,
+	expect,
+} from '@jest/globals';
 import path from 'path';
 import ts from 'typescript';
 
@@ -53,7 +58,7 @@ it('should search JavaScript source files', async () => {
 });
 
 it.skip('should handle undefined input from TypesSript compiler', () => {
-	const emit = jest.fn();
+	const emit = jest.fn<(arg: unknown, callback: () => void) => void>();
 	const program = {
 		emit,
 	} as unknown as ts.Program;
