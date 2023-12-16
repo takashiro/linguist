@@ -37,6 +37,8 @@ jobs:
           npm pkg delete devDependencies
       -
         name: Publish
-        run: npm publish --access=public
+        run: |
+          cd bin
+          npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
