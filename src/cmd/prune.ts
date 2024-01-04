@@ -1,31 +1,33 @@
 import path from 'path';
 
-import { Config } from '../base/Config';
+import { parse } from '../base/Config';
 import MessageBundle from '../base/MessageBundle';
 import SourceSet from '../base/SourceSet';
 
 export const command = 'prune';
 export const describe = 'Remove non-existing messages from bundles.';
 
-export async function handler(argv: Config): Promise<void> {
+export async function handler(): Promise<void> {
 	console.log('Searching source files...');
 
+	const config = await parse();
+
 	const sourceSet = new SourceSet();
-	sourceSet.setOverrideIdFn(argv.overrideIdFn);
+	sourceSet.setOverrideIdFn(config.overrideIdFn);
 
 	sourceSet.on('added', (filePath) => {
 		console.log(`Parsing ${filePath}`);
 	});
-	await sourceSet.addDirectory(argv.sourceDir);
+	await sourceSet.addDirectory(config.sourceDir);
 
 	sourceSet.on('extracted', (filePath) => {
 		console.log(`Parsing ${filePath}`);
 	});
 	const messages = sourceSet.extractMessages();
 
-	const { locales } = argv;
+	const { locales } = config;
 	for (const localeId of locales) {
-		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
+		const bundle = new MessageBundle(path.join(config.messageDir, `${localeId}.json`));
 		console.log(`Pruning ${bundle.getFilePath()}`);
 		await bundle.prune(messages);
 	}

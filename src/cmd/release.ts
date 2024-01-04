@@ -1,49 +1,23 @@
 import path from 'path';
-import { Argv } from 'yargs';
 
-import { Config } from '../base/Config';
+import { parse } from '../base/Config';
 import MessageBundle from '../base/MessageBundle';
 import ReleaseFormat from '../base/ReleaseFormat';
 
 export const command = 'release';
 export const describe = 'Create JavaScript files of message bundles.';
 
-type ReleaseArgs = Config;
-
-export function builder(argv: Argv): Argv {
-	return argv
-		.option('outDir', {
-			description: 'Output directory to generated released version of messages.',
-			type: 'string',
-			default: 'dist/message',
-		})
-		.option('format', {
-			description: 'Format of message bundles. (js or json)',
-			type: 'string',
-			default: 'json',
-		})
-		.option('globalVariable', {
-			description: 'Global variable name of messages (For *.js format only)',
-			type: 'string',
-			default: 'linguist',
-		})
-		.option('ast', {
-			description: 'Whether to use AST format',
-			type: 'boolean',
-			default: true,
-		});
-}
-
-export async function handler(argv: ReleaseArgs): Promise<void> {
-	const { locales } = argv;
+export async function handler(): Promise<void> {
+	const config = await parse();
+	const { locales } = config;
 	for (const localeId of locales) {
-		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
-		bundle.setAst(argv.ast);
-		const releasePath = path.join(argv.outDir, `${localeId}.${argv.format}`);
+		const bundle = new MessageBundle(path.join(config.messageDir, `${localeId}.json`));
+		bundle.setAst(config.ast);
+		const releasePath = path.join(config.outDir, `${localeId}.${config.format}`);
 		console.log(`Generating ${releasePath} from ${bundle.getFilePath()}`);
-		if (argv.format === ReleaseFormat.JS) {
-			await bundle.releaseJs(releasePath, argv.globalVariable);
-		} else if (argv.format === ReleaseFormat.JSON) {
+		if (config.format === ReleaseFormat.JS) {
+			await bundle.releaseJs(releasePath, config.globalVariable);
+		} else if (config.format === ReleaseFormat.JSON) {
 			await bundle.releaseJson(releasePath);
 		}
 	}

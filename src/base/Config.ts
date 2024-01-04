@@ -1,8 +1,9 @@
-import { InterpolateNameFn } from '@formatjs/ts-transformer';
+import { cosmiconfig, cosmiconfigSync } from 'cosmiconfig';
+import type { InterpolateNameFn } from '@formatjs/ts-transformer';
 
 export interface Config {
 	/**
-	 * Supported locales of the application. Each locale has a separate file. Default: en-US, zh-CN.
+	 * Supported locales of the application. Each locale has a separate file. (Default: en-US, zh-CN, ja-JP)
 	 */
 	locales: string[];
 
@@ -32,7 +33,7 @@ export interface Config {
 	format: string;
 
 	/**
-	 * Whether to use AST format.
+	 * Whether to use AST format. (Default: `true`)
 	 */
 	ast: boolean;
 
@@ -42,11 +43,38 @@ export interface Config {
 	globalVariable: string;
 }
 
-export function parse(location: string): Partial<Config> {
-	try {
-		// eslint-disable-next-line global-require, import/no-dynamic-require
-		return require(location);
-	} catch (e) {
-		return {};
-	}
+const explorer = cosmiconfig('linguist');
+
+function resolve({
+	locales = ['en-US', 'zh-CN', 'ja-JP'],
+	sourceDir = 'src',
+	messageDir = 'message',
+	outDir = 'dist/message',
+	overrideIdFn = '[sha512:contenthash:base64:6]',
+	format = 'json',
+	ast = true,
+	globalVariable = 'linguist',
+}: Partial<Config> = {}): Config {
+	return {
+		locales,
+		sourceDir,
+		messageDir,
+		outDir,
+		overrideIdFn,
+		format,
+		ast,
+		globalVariable,
+	};
+}
+
+export async function parse(): Promise<Config> {
+	const res = await explorer.search();
+	return resolve(res?.config);
+}
+
+const explorerSync = cosmiconfigSync('linguist');
+
+export function parseSync(): Config {
+	const res = explorerSync.search();
+	return resolve(res?.config);
 }

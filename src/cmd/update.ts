@@ -1,28 +1,30 @@
 import path from 'path';
 
-import { Config } from '../base/Config';
+import { parse } from '../base/Config';
 import MessageBundle from '../base/MessageBundle';
 import SourceSet from '../base/SourceSet';
 
 export const command = 'update [sourcePattern]';
 export const describe = 'Extract messages from source files and update message bundles. If sourcePattern is not defined, source directory will be used.';
 
-interface UpdateArgs extends Config {
+interface UpdateArgs {
 	sourcePattern?: string;
 }
 
 export async function handler(argv: UpdateArgs): Promise<void> {
+	const config = await parse();
+
 	const sourceSet = new SourceSet();
-	sourceSet.setOverrideIdFn(argv.overrideIdFn);
+	sourceSet.setOverrideIdFn(config.overrideIdFn);
 
 	if (argv.sourcePattern) {
 		await sourceSet.addFiles(argv.sourcePattern);
-	} else if (argv.sourceDir) {
+	} else if (config.sourceDir) {
 		console.log('Searching source files...');
 		sourceSet.on('added', (filePath) => {
 			console.log(`Found ${filePath}`);
 		});
-		await sourceSet.addDirectory(argv.sourceDir);
+		await sourceSet.addDirectory(config.sourceDir);
 	} else {
 		console.error('Please define a source directory (sourceDir) in the configuration file.');
 		process.exit(1);
@@ -33,9 +35,9 @@ export async function handler(argv: UpdateArgs): Promise<void> {
 	});
 	const messages = sourceSet.extractMessages();
 
-	const { locales } = argv;
+	const { locales } = config;
 	for (const localeId of locales) {
-		const bundle = new MessageBundle(path.join(argv.messageDir, `${localeId}.json`));
+		const bundle = new MessageBundle(path.join(config.messageDir, `${localeId}.json`));
 		console.log(`Updating ${bundle.getFilePath()}`);
 		await bundle.update(messages);
 	}
