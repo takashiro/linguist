@@ -107,7 +107,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 /**
  * @type {import('@karuta/linguist').Config}
 */
-module.exports = {
+export default {
 	/**
 	 * Supported locales of the application. Each locale has a separate file. Default: en-US, zh-CN.
 	 */
