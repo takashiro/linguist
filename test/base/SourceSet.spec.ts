@@ -5,7 +5,7 @@ import {
 } from '@jest/globals';
 import path from 'path';
 
-import SourceSet from '../../src/base/SourceSet';
+import SourceSet from '../../src/base/SourceSet.js';
 
 it('should extract messages', () => {
 	const set = new SourceSet();

@@ -4,7 +4,7 @@ import {
 } from '@formatjs/ts-transformer';
 import { SourceFile, TransformerFactory } from 'typescript';
 
-import { Config as FullConfig, parseSync } from './base/Config';
+import { Config as FullConfig, parseSync } from './base/Config.js';
 
 export type Config = Partial<FullConfig>;
 

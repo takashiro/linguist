@@ -1,8 +1,9 @@
 import path from 'path';
+import type { ArgumentsCamelCase } from 'yargs';
 
-import { parse } from '../base/Config';
-import MessageBundle from '../base/MessageBundle';
-import SourceSet from '../base/SourceSet';
+import { parse } from '../base/Config.js';
+import MessageBundle from '../base/MessageBundle.js';
+import SourceSet from '../base/SourceSet.js';
 
 export const command = 'update [sourcePattern]';
 export const describe = 'Extract messages from source files and update message bundles. If sourcePattern is not defined, source directory will be used.';
@@ -11,7 +12,7 @@ interface UpdateArgs {
 	sourcePattern?: string;
 }
 
-export async function handler(argv: UpdateArgs): Promise<void> {
+export async function handler(argv: ArgumentsCamelCase<UpdateArgs>): Promise<void> {
 	const config = await parse();
 
 	const sourceSet = new SourceSet();

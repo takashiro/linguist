@@ -22,16 +22,8 @@ module.exports = {
 		'class-methods-use-this': 'off',
 		'func-names': 'off',
 		'linebreak-style': 'off',
-		'import/extensions': [
-			'error',
-			'ignorePackages',
-			{
-				ts: 'never',
-				tsx: 'never',
-				js: 'never',
-				jsx: 'never',
-			},
-		],
+		'import/extensions': 'off',
+		'import/no-unresolved': 'off',
 		indent: [
 			'error',
 			'tab',

@@ -1,8 +1,8 @@
 import path from 'path';
 
-import { parse } from '../base/Config';
-import MessageBundle from '../base/MessageBundle';
-import ReleaseFormat from '../base/ReleaseFormat';
+import { parse } from '../base/Config.js';
+import MessageBundle from '../base/MessageBundle.js';
+import ReleaseFormat from '../base/ReleaseFormat.js';
 
 export const command = 'release';
 export const describe = 'Create JavaScript files of message bundles.';

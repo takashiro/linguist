@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { MessageFormatElement, parse } from '@formatjs/icu-messageformat-parser';
 
-import MessageDescriptor from './MessageDescriptor';
+import MessageDescriptor from './MessageDescriptor.js';
 
 type RawMessageBundle = Record<string, string>;
 

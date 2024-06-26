@@ -9,8 +9,8 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-import MessageBundle from '../../src/base/MessageBundle';
-import MessageDescriptor from '../../src/base/MessageDescriptor';
+import MessageBundle from '../../src/base/MessageBundle.js';
+import type MessageDescriptor from '../../src/base/MessageDescriptor.js';
 
 const {
 	readFile,

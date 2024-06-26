@@ -2,15 +2,17 @@
   "name": "@karuta/linguist",
   "version": "0.7.2",
   "description": "Extract messages and manage translations with FormatJS",
+  "type": "module",
   "bin": {
     "linguist": "bin/linguist.js"
   },
   "main": "bin",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p src",
+    "debug": "tsc -p src --incremental --sourceMap",
     "test": "npm run lint && npm run jest",
     "lint": "eslint --ext ts,js .",
-    "jest": "jest --coverage --no-cache"
+    "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage --no-cache"
   },
   "repository": {
     "type": "git",
@@ -32,15 +34,16 @@
     "@formatjs/ts-transformer": "^3.13.9",
     "cosmiconfig": "^9.0.0",
     "glob": "^10.3.10",
-    "typescript": "^5.3.3",
+    "typescript": "^5.5.2",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/node": "^18.19.3",
     "@types/yargs": "^17.0.32",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",

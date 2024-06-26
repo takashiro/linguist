@@ -1,8 +1,8 @@
 import path from 'path';
 
-import { parse } from '../base/Config';
-import MessageBundle from '../base/MessageBundle';
-import SourceSet from '../base/SourceSet';
+import { parse } from '../base/Config.js';
+import MessageBundle from '../base/MessageBundle.js';
+import SourceSet from '../base/SourceSet.js';
 
 export const command = 'prune';
 export const describe = 'Remove non-existing messages from bundles.';
