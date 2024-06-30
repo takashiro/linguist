@@ -30,16 +30,15 @@
   },
   "homepage": "https://github.com/takashiro/linguist#readme",
   "dependencies": {
-    "@formatjs/icu-messageformat-parser": "^2.7.3",
-    "@formatjs/ts-transformer": "^3.13.9",
+    "@formatjs/icu-messageformat-parser": "^2.7.8",
+    "@formatjs/ts-transformer": "^3.13.14",
     "cosmiconfig": "^9.0.0",
-    "glob": "^10.3.10",
+    "glob": "^10.4.2",
     "typescript": "^5.5.2",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/node": "^18.19.3",
+    "@types/node": "^20.14.9",
     "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
