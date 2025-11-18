@@ -33,7 +33,7 @@
     "@formatjs/icu-messageformat-parser": "^2.7.8",
     "@formatjs/ts-transformer": "^3.13.14",
     "cosmiconfig": "^9.0.0",
-    "glob": "^10.4.2",
+    "glob": "^11.1.0",
     "typescript": "^5.5.2",
     "yargs": "^17.7.2"
   },
